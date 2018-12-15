@@ -1,4 +1,5 @@
 import React, {PureComponent} from "react";
+import ListingController from "./alko/listingController.jsx";
 
 class App extends PureComponent {
     constructor(props) {
@@ -7,9 +8,12 @@ class App extends PureComponent {
 
     render() {
         return (
-            <div>Hello world!</div>
+            <div>
+                <h1>Alko Item Listing</h1>
+                <ListingController />
+            </div>
         );
     }
 }
 
-module.exports.App = App;
+export default App;
