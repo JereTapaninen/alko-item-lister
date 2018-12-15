@@ -2,8 +2,7 @@ import React, {PureComponent} from "react";
 import axios from "axios";
 import _ from "underscore";
 import ListingView from "./listingView";
-
-const alkoURL = "https://www.alko.fi/tuotteet/tuotelistaus?SearchTerm=*&PageSize=76&PageNumber=100";
+import PropTypes from "prop-types";
 
 const productUrlRegex = /(?<=<a href=").*(?=" tabindex="-1" class="js-product-link">)/g;
 const productNameRegex = /(?<=<h1 class="product-name" itemprop="name">).*(?=<\/h1>)/;
@@ -25,12 +24,19 @@ class ListingController extends PureComponent {
             loading: true
         };
 
+        this.start = this.start.bind(this);
         this.parseProductUrls = this.parseProductUrls.bind(this);
         this.createListings = this.createListings.bind(this);
         this.createListing = this.createListing.bind(this);
         this.unescape = this.unescape.bind(this);
 
-        axios.get(alkoURL)
+        if (this.props.startImmediately === true) {
+            this.start(this.props.alkoUrl);
+        }
+    }
+
+    start(url) {
+        return axios.get(url)
             .then(({data}) => this.parseProductUrls(data))
             .then(this.createListings)
             .then(() => {
@@ -38,12 +44,8 @@ class ListingController extends PureComponent {
                 //this.setState({listings});
             })
             .catch(err => {
-                console.error("Error during product get/parsing", err);
+                console.error("Unexpected error during URL get/parsing", url, err);
             });
-    }
-
-    componentDidMount() {
-
     }
 
     unescape(data) {
@@ -96,7 +98,7 @@ class ListingController extends PureComponent {
     }
 
     parseProductUrls(siteData) {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             const productNames = (
                 siteData
                     .match(productUrlRegex)
@@ -111,8 +113,13 @@ class ListingController extends PureComponent {
                 productData={this.state.listings}
                 loading={this.state.loading}
             />
-        )
+        );
     }
 }
+
+ListingController.propTypes = {
+    alkoUrl: PropTypes.string.isRequired,
+    startImmediately: PropTypes.bool.isRequired
+};
 
 export default ListingController;

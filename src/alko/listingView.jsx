@@ -1,5 +1,6 @@
 import React from "react";
 import ReactTable from "react-table";
+import PropTypes from "prop-types";
 
 const listingColumns = [
     {Header: "Name", accessor: "name"},
@@ -20,6 +21,11 @@ const ListingView = ({productData, loading}) => {
             loading={loading}
         />
     );
+};
+
+ListingView.propTypes = {
+    productData: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired
 };
 
 export default ListingView;

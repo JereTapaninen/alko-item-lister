@@ -1,6 +1,6 @@
 {
-  "application/javascript": {
-    "presets": ["react", "env"],
-    "plugins": ["react-hot-loader/babel", "transform-async-to-generator"]
-  }
+    "application/javascript": {
+        "presets": ["react", "env"],
+        "plugins": ["react-hot-loader/babel", "transform-async-to-generator"]
+    }
 }
